@@ -5,6 +5,7 @@
 <table>
   <thead>
     <tr>
+      <th>Picture</th>
       <th>Name</th>
       <th>Description</th>
       <th>Location</th>
@@ -15,6 +16,11 @@
   <tbody>
     <% @tourist_spots.each do |tourist_spot| %>
       <tr>
+        <% if tourist_spot.picture.present? %>
+          <td><%= image_tag(tourist_spot.picture.thumb.url) %></td>
+        <% else %>
+          <td><%= image_tag("no_image.jpg") %></td>
+        <% end %>
         <td><%= tourist_spot.name %></td>
         <td><%= tourist_spot.description %></td>
         <td><%= tourist_spot.location %></td>

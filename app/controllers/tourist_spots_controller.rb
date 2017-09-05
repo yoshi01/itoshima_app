@@ -69,6 +69,6 @@ class TouristSpotsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def tourist_spot_params
-      params.require(:tourist_spot).permit(:name, :description, :location)
+      params.require(:tourist_spot).permit(:name, :description, :location, :picture)
     end
 end

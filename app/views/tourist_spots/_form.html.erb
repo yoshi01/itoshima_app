@@ -26,6 +26,11 @@
     <%= form.text_field :location, id: :tourist_spot_location %>
   </div>
 
+  <div class="field">
+    <%= form.label :picture %>
+    <%= form.file_field :picture, id: :tourist_spot_picture %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>
