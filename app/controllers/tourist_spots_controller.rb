@@ -1,5 +1,6 @@
 class TouristSpotsController < ApplicationController
   before_action :set_tourist_spot, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy]
 
   # GET /tourist_spots
   # GET /tourist_spots.json
