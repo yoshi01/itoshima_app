@@ -27,8 +27,6 @@
         <td><%= tourist_spot.description %></td>
         <td><%= tourist_spot.location %></td>
         <td><%= link_to 'Show', tourist_spot %></td>
-        <td><%= link_to 'Edit', edit_tourist_spot_path(tourist_spot) %></td>
-        <td><%= link_to 'Destroy', tourist_spot, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -36,6 +34,5 @@
 
 <br>
 
-<%= link_to 'New Tourist Spot', new_tourist_spot_path %>
 
 <%= paginate @tourist_spots %>
