@@ -2,6 +2,8 @@
 
 <h1>Tourist Spots</h1>
 
+<%= page_entries_info @tourist_spots %>
+
 <table>
   <thead>
     <tr>
@@ -35,3 +37,5 @@
 <br>
 
 <%= link_to 'New Tourist Spot', new_tourist_spot_path %>
+
+<%= paginate @tourist_spots %>
