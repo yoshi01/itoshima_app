@@ -56,7 +56,7 @@ class TouristSpotsController < ApplicationController
   def destroy
     @tourist_spot.destroy
     respond_to do |format|
-      format.html { redirect_to tourist_spots_url, notice: 'Tourist spot was successfully destroyed.' }
+      format.html { redirect_to root_path, notice: 'Tourist spot was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
