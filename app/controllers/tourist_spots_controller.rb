@@ -4,7 +4,7 @@ class TouristSpotsController < ApplicationController
   # GET /tourist_spots
   # GET /tourist_spots.json
   def index
-    @tourist_spots = TouristSpot.all
+    @tourist_spots = TouristSpot.page(params[:page])
   end
 
   # GET /tourist_spots/1
