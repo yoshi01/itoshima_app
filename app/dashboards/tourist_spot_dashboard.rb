@@ -14,8 +14,8 @@ class TouristSpotDashboard < Administrate::BaseDashboard
     location: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    picture: Field::String,
-  }.freeze
+    picture: Field::Carrierwave
+}.freeze
 
   # COLLECTION_ATTRIBUTES
   # an array of attributes that will be displayed on the model's index page.

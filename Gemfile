@@ -34,6 +34,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'carrierwave'
 gem 'rmagick'
+gem 'administrate-field-carrierwave'
 
 gem 'bootstrap-sass'
 
