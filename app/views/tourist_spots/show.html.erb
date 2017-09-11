@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @tourist_spot.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @tourist_spot.description %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @tourist_spot.location %>
+</p>
+
+<p>
+  <strong>Picture:</strong>
+  <%= image_tag(@tourist_spot.picture_url)if @tourist_spot.picture.present? %>
+</p>
+
