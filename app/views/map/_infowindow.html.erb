@@ -1,0 +1,11 @@
+<div id="info-window-name">
+  <%= link_to tourist_spot.name, tourist_spot %>
+</div>
+
+<div id="info-window-picture">
+  <% if tourist_spot.picture.present? %>
+    <%= image_tag(tourist_spot.picture.thumb.url) %>
+  <% else %>
+    <%= image_tag("no_image.jpg") %>
+  <% end %>
+</div>
