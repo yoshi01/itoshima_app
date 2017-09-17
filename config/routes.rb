@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'map' => 'map#index'
+
   devise_for :users, only: [:session]
   devise_scope :user do
     get '/users/sign_out' => 'devise/sessions#destroy'
