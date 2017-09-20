@@ -9,3 +9,8 @@
     <%= image_tag("no_image.jpg") %>
   <% end %>
 </div>
+
+<div id="info-wondow-point">
+  <%= link_to "始点", map_path(start_id: tourist_spot.id, end_id: end_id) %>
+  <%= link_to "終点", map_path(start_id: start_id, end_id: tourist_spot.id) %>
+</div>
