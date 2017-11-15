@@ -2,26 +2,17 @@
   <div id="map" class="map_canvas"></div>
 </div>
 
-<ul>
-  <li>始点: <%= @start_spot.name if @start_spot.present? %></li>
-  <li>終点: <%= @end_spot.name if @end_spot.present? %></li>
-</ul>
+<ul id="route-list"></ul>
 
-<% if @start_spot.present? && @end_spot.present? %>
-  <%= button_tag "経路を検索する", class: "btn btn-primary", onclick: "calcRoute()" %>
-<% else %>
-  <%= button_tag "経路を検索する", class: "btn", disabled: true %>
-<% end %>
-
+<%= button_tag "経路を検索する", class: "btn btn-primary", onclick: "searchRoute()" %>
 
 <script type="text/javascript">
     var directionsDisplay = new google.maps.DirectionsRenderer();
     var directionsService = new google.maps.DirectionsService();
-    
-    function calcRoute() {
-    <% if @start_spot.present? && @end_spot.present? %>
-      var origin      = new google.maps.LatLng(<%= @start_spot.latitude %>, <%= @start_spot.longitude %>);
-      var destination = new google.maps.LatLng(<%= @end_spot.latitude %>, <%= @end_spot.longitude %>);
+
+    function searchRoute() {
+      var origin      = new google.maps.LatLng(33.56, 130.19);
+      var destination = new google.maps.LatLng(33.58, 130.12);
       var request = {
           origin:      origin,
           destination: destination,
@@ -32,7 +23,6 @@
           directionsDisplay.setDirections(response);
         }
       });
-    <% end %>
     }
 
     handler = Gmaps.build('Google');
@@ -44,4 +34,12 @@
       handler.getMap().setZoom(12);
       directionsDisplay.setMap(handler.getMap());
     });
+
+    function addRoute(spot_name, spot_lat, spot_long){
+      var li = $('<li>').text(spot_name + "(" + spot_lat.toString()
+      + ", " + spot_long.toString() + ")");
+      $('#route-list').append(li);
+    }
+
+
 </script>
