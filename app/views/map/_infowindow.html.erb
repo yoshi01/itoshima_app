@@ -11,6 +11,6 @@
 </div>
 
 <div id="info-wondow-point">
-  <%= link_to "始点", map_path(start_id: tourist_spot.id, end_id: end_id) %>
-  <%= link_to "終点", map_path(start_id: start_id, end_id: tourist_spot.id) %>
+  <%= button_tag "経路に追加", id: "btn-add-route", onclick: "addRoute('#{tourist_spot.name}',
+    #{tourist_spot.latitude}, #{tourist_spot.longitude})" %>
 </div>
