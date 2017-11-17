@@ -59,8 +59,13 @@
       var li = $('<li>').text(spot_name);
       $(li).attr("data-lat", spot_lat.toString());
       $(li).attr("data-long", spot_long.toString());
-      $('#route-list').append(li);
+      var btn = '<button class="delete-btn">×</button>';
+      $('#route-list').append($(li).append(btn));
     }
+
+    $('#route-list').on("click", ".delete-btn", function() {
+      $(this).parents('li').remove();
+    });
 
 
 </script>
