@@ -4,7 +4,7 @@
 
 <ul id="route-list"></ul>
 
-<%= button_tag "経路を検索する", class: "btn btn-primary", onclick: "searchRoute()" %>
+<%= button_tag "経路を検索する", id: "search-btn", class: "btn btn-primary", onclick: "searchRoute()", disabled: true %>
 
 <script type="text/javascript">
     var rendererOptions = {
@@ -55,16 +55,23 @@
       directionsDisplay.setMap(handler.getMap());
     });
 
+
     function addRoute(spot_name, spot_lat, spot_long){
       var li = $('<li>').text(spot_name);
       $(li).attr("data-lat", spot_lat.toString());
       $(li).attr("data-long", spot_long.toString());
       var btn = '<button class="delete-btn">×</button>';
       $('#route-list').append($(li).append(btn));
+      if ($('#route-list li').length == 2) {
+        $('#search-btn').removeAttr("disabled");
+      }
     }
 
     $('#route-list').on("click", ".delete-btn", function() {
       $(this).parents('li').remove();
+      if ($('#route-list li').length == 1) {
+        $('#search-btn').attr("disabled", "true");
+      }
     });
 
 
