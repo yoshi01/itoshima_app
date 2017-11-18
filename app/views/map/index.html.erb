@@ -1,12 +1,15 @@
-<div class="map_container">
-  <div id="map" class="map_canvas"></div>
+<div class="map-container">
+  <div id="map" class="map-canvas"></div>
+  <div class="map-route">
+    <h4>- 経路リスト -</h4>
+    <ul id="route-list" class="list-group"></ul>
+    <%= button_tag "地図上から選択", id: "add-marker-btn", onclick: "addMarker()" %>
+  </div>
+  <div class="map-search">
+    <%= button_tag "経路を検索する", id: "search-btn", class: "btn btn-primary", onclick: "searchRoute()", disabled: true %>
+  </div>
 </div>
 
-<ul id="route-list"></ul>
-
-<%= button_tag "地図上から選択", id: "add-marker-btn", onclick: "addMarker()" %>
-
-<%= button_tag "経路を検索する", id: "search-btn", class: "btn btn-primary", onclick: "searchRoute()", disabled: true %>
 
 <script type="text/javascript">
     var rendererOptions = {
@@ -94,13 +97,15 @@
       var li = $('<li>').text(name);
       $(li).attr("data-lat", lat.toString());
       $(li).attr("data-long", lng.toString());
+      $(li).addClass("list-group-item");
       var btn = $('<button>').text("×");
       $(btn).addClass("delete-btn");
+      $(btn).addClass("btn btn-secondary");
       if (marker_id != null && marker_id != undefined ) {
         $(btn).addClass("marked");
         $(btn).attr("data-marker-id", marker_id.toString());
       }
-      $('#route-list').append($(li).append(btn));
+      $('#route-list').append($(li).prepend(btn));
       checkDisabled();
     }
 
