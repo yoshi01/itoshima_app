@@ -7,6 +7,11 @@ class MapController < ApplicationController
       marker.infowindow render_to_string( partial: "map/infowindow",
                                           locals: { tourist_spot: tourist_spot}
                                         )
+      marker.picture({
+        url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+        width: 32,
+        height: 32
+      });
     end
   end
 end

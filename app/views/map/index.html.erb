@@ -71,6 +71,7 @@
         var roundLng = Math.round(lng * 1000)/1000;
         var marker = new google.maps.Marker({
              position: event.latLng,
+             icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
             });
         marker.setMap(map);
         spotMarkers.push(marker);
