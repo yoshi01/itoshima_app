@@ -4,6 +4,8 @@
 
 <ul id="route-list"></ul>
 
+<%= button_tag "地図上から選択", id: "add-marker-btn", onclick: "addMarker()" %>
+
 <%= button_tag "経路を検索する", id: "search-btn", class: "btn btn-primary", onclick: "searchRoute()", disabled: true %>
 
 <script type="text/javascript">
@@ -52,26 +54,70 @@
       handler.fitMapToBounds();
       handler.getMap().setCenter(new google.maps.LatLng(33.56, 130.19));
       handler.getMap().setZoom(12);
+      google.maps.event.addListener(handler.getMap(), "click", mapListener);;
       directionsDisplay.setMap(handler.getMap());
     });
 
+    var map = handler.getMap();
+    var spotMarkers = [];
+    var markerId = 0;
+    var markerMode= false;
 
-    function addRoute(spot_name, spot_lat, spot_long){
-      var li = $('<li>').text(spot_name);
-      $(li).attr("data-lat", spot_lat.toString());
-      $(li).attr("data-long", spot_long.toString());
-      var btn = '<button class="delete-btn">×</button>';
-      $('#route-list').append($(li).append(btn));
-      if ($('#route-list li').length == 2) {
-        $('#search-btn').removeAttr("disabled");
+    function mapListener(event){
+      if (markerMode) {
+        var lat = event.latLng.lat();
+        var lng = event.latLng.lng();
+        var roundLat = Math.round(lat * 1000)/1000;
+        var roundLng = Math.round(lng * 1000)/1000;
+        var marker = new google.maps.Marker({
+             position: event.latLng,
+            });
+        marker.setMap(map);
+        spotMarkers.push(marker);
+        addRoute("選択地点 (" + roundLng.toString() + ", " + roundLng.toString() + ")", lat, lng, markerId);
+        markerId = markerId + 1;
+        markerMode = false;
       }
     }
 
-    $('#route-list').on("click", ".delete-btn", function() {
-      $(this).parents('li').remove();
-      if ($('#route-list li').length == 1) {
+    function addMarker(){
+      if(!markerMode) {
+        markerMode = true;
+      }
+    }
+
+    function addRoute(name, lat, lng, marker_id){
+      var li = $('<li>').text(name);
+      $(li).attr("data-lat", lat.toString());
+      $(li).attr("data-long", lng.toString());
+      var btn = $('<button>').text("×");
+      $(btn).addClass("delete-btn");
+      if (marker_id != null && marker_id != undefined ) {
+        $(btn).addClass("marked");
+        $(btn).attr("data-marker-id", marker_id.toString());
+      }
+      $('#route-list').append($(li).append(btn));
+      checkDisabled();
+    }
+
+    function checkDisabled() {
+      var listSize = $('#route-list li').length;
+      if (listSize == 2) {
+        $('#search-btn').removeAttr("disabled");
+      } else if (listSize == 1) {
         $('#search-btn').attr("disabled", "true");
       }
+    }
+
+    $('#route-list').on("click", ".marked", function() {
+      var id = $(this).attr("data-marker-id");
+      spotMarkers[id].setMap(null);
+    });
+
+    $('#route-list').on("click", ".delete-btn", function() {
+      directionsDisplay.setDirections({routes: []});
+      $(this).parents('li').remove();
+      checkDisabled();
     });
 
 
