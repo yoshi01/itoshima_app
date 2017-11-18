@@ -54,6 +54,7 @@
       handler.fitMapToBounds();
       handler.getMap().setCenter(new google.maps.LatLng(33.56, 130.19));
       handler.getMap().setZoom(12);
+      handler.getMap().setOptions({ draggableCursor: "default" });
       google.maps.event.addListener(handler.getMap(), "click", mapListener);;
       directionsDisplay.setMap(handler.getMap());
     });
@@ -77,6 +78,7 @@
         spotMarkers.push(marker);
         addRoute("選択地点 (" + roundLng.toString() + ", " + roundLng.toString() + ")", lat, lng, markerId);
         markerId = markerId + 1;
+        map.setOptions({ draggableCursor: "default"});
         markerMode = false;
       }
     }
@@ -84,6 +86,7 @@
     function addMarker(){
       if(!markerMode) {
         markerMode = true;
+        map.setOptions({ draggableCursor: "crosshair"});
       }
     }
 
