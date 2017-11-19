@@ -105,8 +105,11 @@
         $(btn).addClass("marked");
         $(btn).attr("data-marker-id", marker_id.toString());
       }
-      $('#route-list').append($(li).prepend(btn));
-      checkDisabled();
+      li = $(li).prepend(btn);
+      if (!isRouteListExists(li)) {
+        $('#route-list').append(li);
+        checkDisabled();
+      };
     }
 
     function checkDisabled() {
@@ -116,6 +119,16 @@
       } else if (listSize == 1) {
         $('#search-btn').attr("disabled", "true");
       }
+    }
+
+    function isRouteListExists(li) {
+      var exist = false;
+      $('#route-list li').each(function() {
+        if($(this).text() == $(li).text()) {
+          exist = true;
+        }
+      })
+      return exist;
     }
 
     $('#route-list').on("click", ".marked", function() {
