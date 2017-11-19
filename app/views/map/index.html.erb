@@ -1,38 +1,53 @@
-<div class="map_container">
-  <div id="map" class="map_canvas"></div>
+<div class="map-container">
+  <div id="map" class="map-canvas"></div>
+  <div class="map-route">
+    <h4>- 経路リスト -</h4>
+    <ul id="route-list" class="list-group"></ul>
+    <%= button_tag "地図上から選択", id: "add-marker-btn", onclick: "addMarker()" %>
+  </div>
+  <div class="map-search">
+    <%= button_tag "経路を検索する", id: "search-btn", class: "btn btn-primary", onclick: "searchRoute()", disabled: true %>
+  </div>
 </div>
-
-<ul>
-  <li>始点: <%= @start_spot.name if @start_spot.present? %></li>
-  <li>終点: <%= @end_spot.name if @end_spot.present? %></li>
-</ul>
-
-<% if @start_spot.present? && @end_spot.present? %>
-  <%= button_tag "経路を検索する", class: "btn btn-primary", onclick: "calcRoute()" %>
-<% else %>
-  <%= button_tag "経路を検索する", class: "btn", disabled: true %>
-<% end %>
 
 
 <script type="text/javascript">
-    var directionsDisplay = new google.maps.DirectionsRenderer();
+    var rendererOptions = {
+      suppressMarkers : true
+    }
+    var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
     var directionsService = new google.maps.DirectionsService();
-    
-    function calcRoute() {
-    <% if @start_spot.present? && @end_spot.present? %>
-      var origin      = new google.maps.LatLng(<%= @start_spot.latitude %>, <%= @start_spot.longitude %>);
-      var destination = new google.maps.LatLng(<%= @end_spot.latitude %>, <%= @end_spot.longitude %>);
-      var request = {
-          origin:      origin,
-          destination: destination,
-          travelMode:  google.maps.TravelMode.DRIVING
-      };
-      directionsService.route(request, function(response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-          directionsDisplay.setDirections(response);
+
+    function searchRoute() {
+      var points = $('#route-list li');
+
+      if (points.length >= 2){
+        var origin;
+        var destination;
+        var waypoints = [];
+
+        for (var i = 0; i < points.length; i++) {
+            points[i] = new google.maps.LatLng($(points[i]).attr("data-lat"), $(points[i]).attr("data-long"));
+          if (i == 0){
+            origin = points[i];
+          } else if (i == points.length-1){
+            destination = points[i];
+          } else {
+            waypoints.push({ location: points[i], stopover: true });
+          }
         }
-      });
-    <% end %>
+        var request = {
+            origin:      origin,
+            destination: destination,
+            waypoints: waypoints,
+            travelMode:  google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+          }
+        });
+      }
     }
 
     handler = Gmaps.build('Google');
@@ -42,6 +57,90 @@
       handler.fitMapToBounds();
       handler.getMap().setCenter(new google.maps.LatLng(33.56, 130.19));
       handler.getMap().setZoom(12);
+      handler.getMap().setOptions({ draggableCursor: "default" });
+      google.maps.event.addListener(handler.getMap(), "click", mapListener);;
       directionsDisplay.setMap(handler.getMap());
     });
+
+    var map = handler.getMap();
+    var spotMarkers = [];
+    var markerId = 0;
+    var markerMode= false;
+
+    function mapListener(event){
+      if (markerMode) {
+        var lat = event.latLng.lat();
+        var lng = event.latLng.lng();
+        var roundLat = Math.round(lat * 1000)/1000;
+        var roundLng = Math.round(lng * 1000)/1000;
+        var marker = new google.maps.Marker({
+             position: event.latLng,
+             icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+            });
+        marker.setMap(map);
+        spotMarkers.push(marker);
+        addRoute("選択地点 (" + roundLng.toString() + ", " + roundLng.toString() + ")", lat, lng, markerId);
+        markerId = markerId + 1;
+        map.setOptions({ draggableCursor: "default"});
+        markerMode = false;
+      }
+    }
+
+    function addMarker(){
+      if(!markerMode) {
+        markerMode = true;
+        map.setOptions({ draggableCursor: "crosshair"});
+      }
+    }
+
+    function addRoute(name, lat, lng, marker_id){
+      var li = $('<li>').text(name);
+      $(li).attr("data-lat", lat.toString());
+      $(li).attr("data-long", lng.toString());
+      $(li).addClass("list-group-item");
+      var btn = $('<button>').text("×");
+      $(btn).addClass("delete-btn");
+      $(btn).addClass("btn btn-secondary");
+      if (marker_id != null && marker_id != undefined ) {
+        $(btn).addClass("marked");
+        $(btn).attr("data-marker-id", marker_id.toString());
+      }
+      li = $(li).prepend(btn);
+      if (!isRouteListExists(li)) {
+        $('#route-list').append(li);
+        checkDisabled();
+      };
+    }
+
+    function checkDisabled() {
+      var listSize = $('#route-list li').length;
+      if (listSize == 2) {
+        $('#search-btn').removeAttr("disabled");
+      } else if (listSize == 1) {
+        $('#search-btn').attr("disabled", "true");
+      }
+    }
+
+    function isRouteListExists(li) {
+      var exist = false;
+      $('#route-list li').each(function() {
+        if($(this).text() == $(li).text()) {
+          exist = true;
+        }
+      })
+      return exist;
+    }
+
+    $('#route-list').on("click", ".marked", function() {
+      var id = $(this).attr("data-marker-id");
+      spotMarkers[id].setMap(null);
+    });
+
+    $('#route-list').on("click", ".delete-btn", function() {
+      directionsDisplay.setDirections({routes: []});
+      $(this).parents('li').remove();
+      checkDisabled();
+    });
+
+
 </script>
