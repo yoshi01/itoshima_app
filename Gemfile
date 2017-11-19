@@ -36,6 +36,8 @@ gem 'carrierwave'
 gem 'rmagick'
 gem 'administrate-field-carrierwave'
 
+gem 'fog'
+
 gem 'bootstrap-sass'
 
 gem 'kaminari'
