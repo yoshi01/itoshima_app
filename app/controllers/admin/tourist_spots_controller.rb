@@ -9,6 +9,12 @@ module Admin
     #     page(params[:page]).
     #     per(10)
     # end
+    before_action :default_params
+
+    def default_params
+      params[:order] ||= 'id'
+      params[:direction] ||= 'desc'
+    end
 
     # Define a custom finder by overriding the `find_resource` method:
     # def find_resource(param)
