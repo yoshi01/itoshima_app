@@ -1,20 +1,19 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Tourist Spots</h1>
+<h2>観光スポット一覧</h2>
 
-<%= page_entries_info @tourist_spots %>
-
-<table class="table">
+<table class="table table-hover">
   <% @tourist_spots.each do |tourist_spot| %>
     <tr>
       <% if tourist_spot.picture.present? %>
-        <td rowspan=3><%= image_tag(tourist_spot.picture.thumb.url) %></td>
+        <td><%= image_tag(tourist_spot.picture.thumb.url) %></td>
       <% else %>
-        <td rowspan=3><%= image_tag("no_image.jpg") %></td>
+        <td><%= image_tag("no_image.jpg") %></td>
       <% end %>
-      <td class="table-spot-name"><%= link_to tourist_spot.name, tourist_spot %></td>
-    <tr><td><%= tourist_spot.description %></td></tr>
-    <tr><td><%= tourist_spot.location %></td></tr>
+      <td>
+          <h4><%= link_to tourist_spot.name, tourist_spot, class: "table-spot-name" %></h4>
+          <p class="text-muted"><%= tourist_spot.description %></p>
+      </td>
     </tr>
   <% end %>
 </table>
