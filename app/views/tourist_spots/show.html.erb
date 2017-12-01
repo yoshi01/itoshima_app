@@ -1,22 +1,24 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @tourist_spot.name %>
-</p>
+<h1><%= @tourist_spot.name %></h1>
 
-<p>
-  <strong>Description:</strong>
-  <%= @tourist_spot.description %>
-</p>
+<ul class="list-group">
 
-<p>
-  <strong>Location:</strong>
-  <%= @tourist_spot.location %>
-</p>
+  <li class="list-group-item">
+    <h3>説明</h3>
+    <p><%= @tourist_spot.description %></p>
+  </li>
 
-<p>
-  <strong>Picture:</strong>
-  <%= image_tag(@tourist_spot.picture_url)if @tourist_spot.picture.present? %>
-</p>
+  <li class="list-group-item">
+    <h3>住所</h3>
+    <p><%= @tourist_spot.location %></p>
+  </li>
 
+  <li class="list-group-item">
+    <h3>写真</h3>
+    <p><%= image_tag(@tourist_spot.picture_url)if @tourist_spot.picture.present? %></p>
+  </li>
+
+</ul>
+
+<%= link_to '&lsaquo; 戻る'.html_safe, :back %>
