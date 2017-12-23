@@ -12,5 +12,6 @@
 
 <div id="info-wondow-point">
   <%= button_tag "経路に追加", id: "btn-add-route", class: "btn btn-primary btn-sm", onclick: "addRoute('#{tourist_spot.name}',
+    '#{tourist_spot.description}', '#{tourist_spot_path(tourist_spot.id)}',
     #{tourist_spot.latitude}, #{tourist_spot.longitude})" %>
 </div>
