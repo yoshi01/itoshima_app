@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   end
   namespace :admin do
     resources :tourist_spots
+    resources :courses
+    resources :course_relationships
     root to: "tourist_spots#index"
   end
 
