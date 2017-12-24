@@ -1,7 +1,11 @@
 <div class="map-container">
   <div id="map" class="map-canvas"></div>
   <div class="map-route">
-    <h4>- 経路リスト -</h4>
+    <select id="select-course" class="form-control">
+      <% @courses.each do |course| %>
+        <option><%= course.name %></option>
+      <% end %>
+    </select>
     <table id="route-list" class="table"></table>
     <%= button_tag "地図上から選択", id: "add-marker-btn", onclick: "addMarker()" %>
   </div>
