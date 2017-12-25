@@ -15,12 +15,22 @@
     padding: 0;
 }
 
+.map-course {
+    position: absolute;
+    height: 54px;
+    top: 0;
+    right: 0;
+    left: 60%;
+    margin: 0;
+    padding: 10px;
+}
+
 .map-route {
     overflow: scroll;
     position: absolute;
-    top: 0;
+    top: 54px;
     right: 0;
-    bottom: 10%;
+    bottom: 54px;
     left: 60%;
     margin: 0;
     padding: 10px;
@@ -28,7 +38,7 @@
 
 .map-search {
     position: absolute;
-    top: 90%;
+    height: 54px;
     right: 0;
     bottom: 0;
     left: 60%;
@@ -36,18 +46,10 @@
     padding: 10px;
 }
 
-#route-list {
-    margin-bottom: 5px;
-}
-
 #add-marker-btn {
-    margin: 5px;
+    margin-left: 5px;
 }
 
-#search-btn {
-    margin: 5px;
-}
-
-#select-course {
-    margin-bottom: 5px;
+#route-list {
+    margin: 0px;
 }
