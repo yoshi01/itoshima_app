@@ -8,6 +8,10 @@ var spotMarkers = [];
 var markerId = 0;
 var markerMode= false;
 
+$(document).ready( function(){
+    courseChanged($('#select-course').get(0));
+});
+
 function searchRoute() {
     var points = $('#route-list tr');
 
@@ -139,16 +143,22 @@ function courseChanged(obj) {
         }
     })
         .done(function(data){
+            clearRoute();
             for(let i = 0; i < data.length; i++) {
                 var spot = data[i].tourist_spot;
                 var spot_path = "/tourist_spots/" + spot.id.toString();
                 addRoute(spot.name, spot.description, spot_path,
                     spot.latitude, spot.longitude)
             }
+            searchRoute();
         })
         .fail(function(data){
             console.log("ajax failed");
         });
+}
+
+function clearRoute() {
+    $('#route-list').empty();
 }
 
 $('#route-list').on("click", ".marked", function() {
