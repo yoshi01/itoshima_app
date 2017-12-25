@@ -125,6 +125,32 @@ function isRouteListExists(tr) {
     return exist;
 }
 
+function courseChanged(obj) {
+    var idx = obj.selectedIndex;
+    var id  = obj.options[idx].value;
+    var token = $("#authenticity_token").val();
+    $.ajax({
+        url: 'map',
+        type:'POST',
+        data:{
+            "ajax_handler": "selectbox-ajax",
+            "authenticity_token": token,
+            "course_id": id
+        }
+    })
+        .done(function(data){
+            for(let i = 0; i < data.length; i++) {
+                var spot = data[i].tourist_spot;
+                var spot_path = "/tourist_spots/" + spot.id.toString();
+                addRoute(spot.name, spot.description, spot_path,
+                    spot.latitude, spot.longitude)
+            }
+        })
+        .fail(function(data){
+            console.log("ajax failed");
+        });
+}
+
 $('#route-list').on("click", ".marked", function() {
     var id = $(this).attr("data-marker-id");
     spotMarkers[id].setMap(null);

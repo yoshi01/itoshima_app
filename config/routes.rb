@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'map' => 'map#index'
+  post 'map' => 'map#index'
 
   devise_for :users, only: [:session]
   devise_scope :user do
