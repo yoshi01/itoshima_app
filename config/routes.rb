@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'map' => 'map#index'
+  post 'map' => 'map#index'
 
   devise_for :users, only: [:session]
   devise_scope :user do
@@ -7,6 +8,8 @@ Rails.application.routes.draw do
   end
   namespace :admin do
     resources :tourist_spots
+    resources :courses
+    resources :course_relationships
     root to: "tourist_spots#index"
   end
 

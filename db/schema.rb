@@ -10,7 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170912060138) do
+ActiveRecord::Schema.define(version: 20171224033548) do
+
+  create_table "course_relationships", force: :cascade do |t|
+    t.integer "course_id"
+    t.integer "tourist_spot_id"
+    t.integer "spot_order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id", "tourist_spot_id"], name: "index_course_relationships_on_course_id_and_tourist_spot_id", unique: true
+    t.index ["course_id"], name: "index_course_relationships_on_course_id"
+    t.index ["tourist_spot_id"], name: "index_course_relationships_on_tourist_spot_id"
+  end
+
+  create_table "courses", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "tourist_spots", force: :cascade do |t|
     t.string "name"
