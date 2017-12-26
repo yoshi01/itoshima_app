@@ -144,7 +144,7 @@ function courseChanged(obj) {
     })
         .done(function(data){
             clearRoute();
-            for(let i = 0; i < data.length; i++) {
+            for(var i = 0; i < data.length; i++) {
                 var spot = data[i].tourist_spot;
                 var spot_path = "/tourist_spots/" + spot.id.toString();
                 addRoute(spot.name, spot.description, spot_path,
