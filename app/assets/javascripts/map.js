@@ -8,8 +8,12 @@ var spotMarkers = [];
 var markerId = 0;
 var markerMode= false;
 
+$(document).ready( function(){
+    courseChanged($('#select-course').get(0));
+});
+
 function searchRoute() {
-    var points = $('#route-list li');
+    var points = $('#route-list tr');
 
     if (points.length >= 2){
         var origin;
@@ -52,7 +56,7 @@ function mapListener(event){
         });
         marker.setMap(map);
         spotMarkers.push(marker);
-        addRoute("選択地点 (" + roundLng.toString() + ", " + roundLng.toString() + ")", lat, lng, markerId);
+        addRoute("選択地点", "(" + roundLat.toString() + ", " + roundLng.toString() + ")", null, lat, lng, markerId);
         markerId = markerId + 1;
         map.setOptions({ draggableCursor: "default"});
         markerMode = false;
@@ -66,27 +70,48 @@ function addMarker(){
     }
 }
 
-function addRoute(name, lat, lng, marker_id){
-    var li = $('<li>').text(name);
-    $(li).attr("data-lat", lat.toString());
-    $(li).attr("data-long", lng.toString());
-    $(li).addClass("list-group-item");
-    var btn = $('<button>').text("×");
-    $(btn).addClass("delete-btn");
-    $(btn).addClass("btn btn-secondary");
+function addRoute(name, desc, path, lat, lng, marker_id){
+    var tr = $('<tr>');
+    var td = $('<td>');
+    var tag;
+    if (path != null) {
+      tag = $('<a>', {
+        "class": "table-spot-name",
+        href: path,
+        text: name
+      });
+    } else {
+      tag = $('<h4>', {
+        "class": "table-spot-name",
+        text: name
+      });
+    }
+    var p = $('<p>', {
+      "class": "text-muted",
+      text: desc
+    });
+    var btn = $('<button>', {
+      "class": "btn btn-secondary delete-btn",
+      text: "×"
+    });
     if (marker_id != null && marker_id != undefined ) {
         $(btn).addClass("marked");
         $(btn).attr("data-marker-id", marker_id.toString());
     }
-    li = $(li).prepend(btn);
-    if (!isRouteListExists(li)) {
-        $('#route-list').append(li);
+    $(tr).attr("data-lat", lat.toString());
+    $(tr).attr("data-long", lng.toString());
+    td = $(td).append(tag);
+    td = $(td).append(p);
+    tr = $(tr).append(td);
+    tr = $(tr).append($('<td>').append(btn));
+    if (!isRouteListExists(tr)) {
+        $('#route-list').append(tr);
         checkDisabled();
     };
 }
 
 function checkDisabled() {
-    var listSize = $('#route-list li').length;
+    var listSize = $('#route-list tr').length;
     if (listSize == 2) {
         $('#search-btn').removeAttr("disabled");
     } else if (listSize == 1) {
@@ -94,14 +119,52 @@ function checkDisabled() {
     }
 }
 
-function isRouteListExists(li) {
+function isRouteListExists(tr) {
     var exist = false;
-    $('#route-list li').each(function() {
-        if($(this).text() == $(li).text()) {
+    $('#route-list tr').each(function() {
+        if($('p', this).text() == $('p', tr).text()) {
             exist = true;
         }
     })
     return exist;
+}
+
+function courseChanged(obj) {
+    var idx = obj.selectedIndex;
+    var id  = obj.options[idx].value;
+    var token = $("#authenticity_token").val();
+    $.ajax({
+        url: 'map',
+        type:'POST',
+        data:{
+            "ajax_handler": "selectbox-ajax",
+            "authenticity_token": token,
+            "course_id": id
+        }
+    })
+        .done(function(data){
+            clearRoute();
+            for(let i = 0; i < data.length; i++) {
+                var spot = data[i].tourist_spot;
+                var spot_path = "/tourist_spots/" + spot.id.toString();
+                addRoute(spot.name, spot.description, spot_path,
+                    spot.latitude, spot.longitude)
+            }
+            searchRoute();
+        })
+        .fail(function(data){
+            console.log("ajax failed");
+        });
+}
+
+function clearRoute() {
+    var id;
+    var marked_spots = $('#route-list tr .marked');
+    for (var i = 0; i < marked_spots.length; i++) {
+        id = $(marked_spots[i]).attr("data-marker-id");
+        spotMarkers[id].setMap(null);
+    }
+    $('#route-list').empty();
 }
 
 $('#route-list').on("click", ".marked", function() {
@@ -111,6 +174,6 @@ $('#route-list').on("click", ".marked", function() {
 
 $('#route-list').on("click", ".delete-btn", function() {
     directionsDisplay.setDirections({routes: []});
-    $(this).parents('li').remove();
+    $(this).parents('tr').remove();
     checkDisabled();
 });
