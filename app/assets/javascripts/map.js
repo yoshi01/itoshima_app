@@ -158,6 +158,12 @@ function courseChanged(obj) {
 }
 
 function clearRoute() {
+    var id;
+    var marked_spots = $('#route-list tr .marked');
+    for (var i = 0; i < marked_spots.length; i++) {
+        id = $(marked_spots[i]).attr("data-marker-id");
+        spotMarkers[id].setMap(null);
+    }
     $('#route-list').empty();
 }
 
