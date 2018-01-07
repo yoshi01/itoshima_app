@@ -4,14 +4,14 @@
 
 <table class="table table-hover">
   <% @tourist_spots.each do |tourist_spot| %>
-    <tr>
+    <tr data-href="<%= tourist_spot_path(tourist_spot) %>">
       <% if tourist_spot.picture.present? %>
         <td><%= image_tag(tourist_spot.picture.thumb.url) %></td>
       <% else %>
         <td><%= image_tag("no_image.jpg") %></td>
       <% end %>
       <td>
-          <h4><%= link_to tourist_spot.name, tourist_spot, class: "table-spot-name" %></h4>
+          <h4 class="table-spot-name"><%= tourist_spot.name %></h4>
           <p class="text-muted"><%= tourist_spot.description %></p>
       </td>
     </tr>
@@ -22,3 +22,5 @@
 
 
 <%= paginate @tourist_spots %>
+
+<%= javascript_include_tag "index.js" %>
