@@ -22,6 +22,11 @@
       Gmaps.store.markers = markers.map(function(m) {
         marker = handler.addMarker(m);
         marker.serviceObject.set('id', m.id);
+        marker.serviceObject.set('label', {
+          text: m.id,
+          fontSize: "12px",
+          color: "white"
+        });
         return marker;
       });
       handler.bounds.extendWith(Gmaps.store.markers);
@@ -36,9 +41,15 @@
         $.each(Gmaps.store.markers, function() {
           if (this.serviceObject.id == id) {
             if (color === "green") {
-              this.serviceObject.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+              this.serviceObject.label.color = "black";
+              this.serviceObject.setIcon({
+                url: "http://maps.google.com/mapfiles/ms/icons/green.png",
+                size: new google.maps.Size(32, 32),
+                labelOrigin: new google.maps.Point(16, 10),
+              });
             } else if (color === "red") {
-              this.serviceObject.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+              this.serviceObject.label.color = "white";
+              this.serviceObject.setIcon(null);
             }
           }
         });
