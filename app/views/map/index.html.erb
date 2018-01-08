@@ -17,13 +17,25 @@
 <script type="text/javascript">
     handler = Gmaps.build('Google');
     handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
-      markers = handler.addMarkers(<%=raw @hash.to_json %>);
-      handler.bounds.extendWith(markers);
+      markers = <%= raw @hash.to_json %>
+      Gmaps.store = {}
+      Gmaps.store.markers = markers.map(function(m) {
+        marker = handler.addMarker(m);
+        marker.serviceObject.set('id', m.id);
+        marker.serviceObject.set('label', {
+          text: m.id,
+          fontSize: "12px",
+          color: "white"
+        });
+        return marker;
+      });
+      handler.bounds.extendWith(Gmaps.store.markers);
       handler.fitMapToBounds();
       handler.getMap().setCenter(new google.maps.LatLng(33.56, 130.19));
       handler.getMap().setZoom(12);
       handler.getMap().setOptions({ draggableCursor: "default" });
-      google.maps.event.addListener(handler.getMap(), "click", mapListener);;
+      google.maps.event.addListener(handler.getMap(), "click", mapListener);
+      google.maps.event.addListener(handler.getMap(), "change", markerChangeListener);
       directionsDisplay.setMap(handler.getMap());
     });
 </script>
