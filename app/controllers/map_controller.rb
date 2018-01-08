@@ -14,6 +14,7 @@ class MapController < ApplicationController
         width: 32,
         height: 32
       });
+      marker.json({ id: tourist_spot.id })
     end
   end
 
