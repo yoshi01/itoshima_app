@@ -9,7 +9,10 @@ class MapController < ApplicationController
       marker.infowindow render_to_string( partial: "map/infowindow",
                                           locals: { tourist_spot: tourist_spot}
                                         )
-      marker.json({ id: tourist_spot.id })
+      marker.json({
+        id: tourist_spot.id,
+        rank: tourist_spot.rank
+      })
     end
   end
 

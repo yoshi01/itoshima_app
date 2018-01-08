@@ -11,7 +11,7 @@
         <td><%= image_tag("no_image.jpg") %></td>
       <% end %>
       <td>
-          <h4 class="table-spot-name"><%= tourist_spot.name %></h4>
+        <h4 class="table-spot-name"><%= "#{tourist_spot.rank}位 #{tourist_spot.name}" %></h4>
           <p class="text-muted"><%= tourist_spot.description %></p>
       </td>
     </tr>
