@@ -12,6 +12,7 @@ class TouristSpotDashboard < Administrate::BaseDashboard
     name: Field::String,
     description: Field::Text,
     location: Field::String,
+    rank: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     picture: Field::Carrierwave
@@ -27,6 +28,7 @@ class TouristSpotDashboard < Administrate::BaseDashboard
     :name,
     :description,
     :location,
+    :rank
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -36,6 +38,7 @@ class TouristSpotDashboard < Administrate::BaseDashboard
     :name,
     :description,
     :location,
+    :rank,
     :created_at,
     :updated_at,
     :picture,
@@ -48,6 +51,7 @@ class TouristSpotDashboard < Administrate::BaseDashboard
     :name,
     :description,
     :location,
+    :rank,
     :picture,
   ].freeze
 
