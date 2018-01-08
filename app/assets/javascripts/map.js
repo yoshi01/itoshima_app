@@ -63,8 +63,22 @@ function mapListener(event){
     }
 }
 
-function markerChangeListener(spot_id, color){
-    Gmaps.changeMarker(spot_id, color);
+function markerChangeListener(id, color){
+    $.each(Gmaps.store.markers, function() {
+        if (this.serviceObject.id == id) {
+            if (color === "green") {
+                this.serviceObject.label.color = "black";
+                this.serviceObject.setIcon({
+                    url: "http://maps.google.com/mapfiles/ms/icons/green.png",
+                    size: new google.maps.Size(32, 32),
+                    labelOrigin: new google.maps.Point(16, 10),
+                });
+            } else if (color === "red") {
+                this.serviceObject.label.color = "white";
+                this.serviceObject.setIcon(null);
+            }
+        }
+    });
 }
 
 function addMarker(){
