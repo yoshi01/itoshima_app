@@ -56,11 +56,29 @@ function mapListener(event){
         });
         marker.setMap(map);
         spotMarkers.push(marker);
-        addRoute("選択地点", "(" + roundLat.toString() + ", " + roundLng.toString() + ")", null, lat, lng, markerId);
+        addRoute(null, "選択地点", "(" + roundLat.toString() + ", " + roundLng.toString() + ")", null, lat, lng, markerId);
         markerId = markerId + 1;
         map.setOptions({ draggableCursor: "default"});
         markerMode = false;
     }
+}
+
+function markerChangeListener(id, color){
+    $.each(Gmaps.store.markers, function() {
+        if (this.serviceObject.id == id) {
+            if (color === "green") {
+                this.serviceObject.label.color = "black";
+                this.serviceObject.setIcon({
+                    url: "http://maps.google.com/mapfiles/ms/icons/green.png",
+                    size: new google.maps.Size(32, 32),
+                    labelOrigin: new google.maps.Point(16, 10),
+                });
+            } else if (color === "red") {
+                this.serviceObject.label.color = "white";
+                this.serviceObject.setIcon(null);
+            }
+        }
+    });
 }
 
 function addMarker(){
@@ -70,7 +88,7 @@ function addMarker(){
     }
 }
 
-function addRoute(name, desc, path, lat, lng, marker_id){
+function addRoute(id, name, desc, path, lat, lng, marker_id){
     var tr = $('<tr>');
     var td = $('<td>');
     var tag;
@@ -94,6 +112,10 @@ function addRoute(name, desc, path, lat, lng, marker_id){
       "class": "btn btn-secondary delete-btn",
       text: "×"
     });
+    if (id != null) {
+        google.maps.event.trigger(handler.getMap(), "change", id, "green");
+        $(tr).attr("data-id", id.toString());
+    }
     if (marker_id != null && marker_id != undefined ) {
         $(btn).addClass("marked");
         $(btn).attr("data-marker-id", marker_id.toString());
@@ -147,7 +169,7 @@ function courseChanged(obj) {
             for(var i = 0; i < data.length; i++) {
                 var spot = data[i].tourist_spot;
                 var spot_path = "/tourist_spots/" + spot.id.toString();
-                addRoute(spot.name, spot.description, spot_path,
+                addRoute(spot.id, spot.name, spot.description, spot_path,
                     spot.latitude, spot.longitude)
             }
             searchRoute();
@@ -158,22 +180,26 @@ function courseChanged(obj) {
 }
 
 function clearRoute() {
-    var id;
-    var marked_spots = $('#route-list tr .marked');
-    for (var i = 0; i < marked_spots.length; i++) {
-        id = $(marked_spots[i]).attr("data-marker-id");
-        spotMarkers[id].setMap(null);
+    var route_spots = $('#route-list tr');
+    for (var i = 0; i < route_spots.length; i++) {
+        removeRoute(route_spots[i]);
     }
-    $('#route-list').empty();
 }
 
-$('#route-list').on("click", ".marked", function() {
-    var id = $(this).attr("data-marker-id");
-    spotMarkers[id].setMap(null);
-});
+function removeRoute(tr) {
+    var id = $(tr).attr("data-id");
+    var marker_id = $(tr).find('.marked').attr('data-marker-id');
+    if (id != null && id != undefined) {
+        google.maps.event.trigger(handler.getMap(), "change", id, "red");
+    }
+    if (marker_id != null && marker_id != undefined) {
+        spotMarkers[marker_id].setMap(null);
+    }
+    directionsDisplay.setDirections({routes: []});
+    $(tr).remove();
+    checkDisabled();
+}
 
 $('#route-list').on("click", ".delete-btn", function() {
-    directionsDisplay.setDirections({routes: []});
-    $(this).parents('tr').remove();
-    checkDisabled();
+    removeRoute($(this).parents('tr'));
 });
