@@ -34,26 +34,9 @@
       handler.getMap().setCenter(new google.maps.LatLng(33.56, 130.19));
       handler.getMap().setZoom(12);
       handler.getMap().setOptions({ draggableCursor: "default" });
-      google.maps.event.addListener(handler.getMap(), "click", mapListener);;
-      google.maps.event.addListener(handler.getMap(), "change", markerChangeListener);;
+      google.maps.event.addListener(handler.getMap(), "click", mapListener);
+      google.maps.event.addListener(handler.getMap(), "change", markerChangeListener);
       directionsDisplay.setMap(handler.getMap());
-      Gmaps.changeMarker = function(id, color) {
-        $.each(Gmaps.store.markers, function() {
-          if (this.serviceObject.id == id) {
-            if (color === "green") {
-              this.serviceObject.label.color = "black";
-              this.serviceObject.setIcon({
-                url: "http://maps.google.com/mapfiles/ms/icons/green.png",
-                size: new google.maps.Size(32, 32),
-                labelOrigin: new google.maps.Point(16, 10),
-              });
-            } else if (color === "red") {
-              this.serviceObject.label.color = "white";
-              this.serviceObject.setIcon(null);
-            }
-          }
-        });
-      }
     });
 </script>
 
