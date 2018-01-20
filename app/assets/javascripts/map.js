@@ -7,6 +7,7 @@ var map = handler.getMap();
 var spotMarkers = [];
 var markerId = 0;
 var markerMode= false;
+var infowindow;
 
 $(document).ready( function(){
     courseChanged($('#select-course').get(0));
@@ -44,6 +45,12 @@ function searchRoute() {
     }
 }
 
+function markerListener(){
+    if (infowindow != null) {
+        infowindow.close();
+    }
+}
+
 function mapListener(event){
     if (markerMode) {
         var lat = event.latLng.lat();
@@ -77,6 +84,23 @@ function markerChangeListener(id, color){
                 this.serviceObject.label.color = "white";
                 this.serviceObject.setIcon(null);
             }
+        }
+    });
+}
+
+function infowindowListener(id){
+    $.each(Gmaps.store.markers, function() {
+        if (this.serviceObject.id == id) {
+            if (infowindow != null) {
+                infowindow.close();
+            }
+            if (handler.currentInfowindow()) {
+                handler.currentInfowindow().close();
+            }
+            infowindow = new google.maps.InfoWindow({
+                content: this.serviceObject.infowindow
+            });
+            infowindow.open(this.serviceObject.map, this.serviceObject);
         }
     });
 }
@@ -199,6 +223,13 @@ function removeRoute(tr) {
     $(tr).remove();
     checkDisabled();
 }
+
+$(document).on("mouseenter", '#route-list tr', function() {
+    var id = $(this).attr("data-id");
+    if (id != null && id != undefined) {
+        google.maps.event.trigger(handler.getMap(), "open", id);
+    }
+});
 
 $('#route-list').on("click", ".delete-btn", function() {
     removeRoute($(this).parents('tr'));
