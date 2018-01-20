@@ -22,11 +22,13 @@
       Gmaps.store.markers = markers.map(function(m) {
         marker = handler.addMarker(m);
         marker.serviceObject.set('id', m.id);
+        marker.serviceObject.set('infowindow', m.infowindow);
         marker.serviceObject.set('label', {
           text: m.rank,
           fontSize: "12px",
           color: "white"
         });
+        google.maps.event.addListener(marker.serviceObject, "click", markerListener);
         return marker;
       });
       handler.bounds.extendWith(Gmaps.store.markers);
@@ -36,6 +38,7 @@
       handler.getMap().setOptions({ draggableCursor: "default" });
       google.maps.event.addListener(handler.getMap(), "click", mapListener);
       google.maps.event.addListener(handler.getMap(), "change", markerChangeListener);
+      google.maps.event.addListener(handler.getMap(), "open", infowindowListener);
       directionsDisplay.setMap(handler.getMap());
     });
 </script>
