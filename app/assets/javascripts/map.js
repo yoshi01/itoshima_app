@@ -224,7 +224,7 @@ function removeRoute(tr) {
     checkDisabled();
 }
 
-$(document).on("mouseenter", '#route-list tr', function() {
+$(document).on("click", '#route-list tr', function() {
     var id = $(this).attr("data-id");
     if (id != null && id != undefined) {
         google.maps.event.trigger(handler.getMap(), "open", id);
