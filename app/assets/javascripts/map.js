@@ -63,7 +63,7 @@ function mapListener(event){
         });
         marker.setMap(map);
         spotMarkers.push(marker);
-        addRoute(null, "選択地点", "(" + roundLat.toString() + ", " + roundLng.toString() + ")", null, lat, lng, markerId);
+        addRoute(null, null, "選択地点", "(" + roundLat.toString() + ", " + roundLng.toString() + ")", null, lat, lng, markerId);
         markerId = markerId + 1;
         map.setOptions({ draggableCursor: "default"});
         markerMode = false;
@@ -112,7 +112,7 @@ function addMarker(){
     }
 }
 
-function addRoute(id, name, desc, path, lat, lng, marker_id){
+function addRoute(id, rank, name, desc, path, lat, lng, marker_id){
     var tr = $('<tr>');
     var td = $('<td>');
     var tag;
@@ -120,7 +120,7 @@ function addRoute(id, name, desc, path, lat, lng, marker_id){
       tag = $('<a>', {
         "class": "table-spot-name",
         href: path,
-        text: name
+        text: rank + "位 " + name
       });
     } else {
       tag = $('<h4>', {
@@ -193,7 +193,7 @@ function courseChanged(obj) {
             for(var i = 0; i < data.length; i++) {
                 var spot = data[i].tourist_spot;
                 var spot_path = "/tourist_spots/" + spot.id.toString();
-                addRoute(spot.id, spot.name, spot.description, spot_path,
+                addRoute(spot.id, spot.rank, spot.name, spot.description, spot_path,
                     spot.latitude, spot.longitude)
             }
             searchRoute();
