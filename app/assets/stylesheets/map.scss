@@ -53,3 +53,16 @@
 #route-list {
     margin: 0px;
 }
+
+.triangle {
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15px 25px 0 25px;
+    border-color: grey transparent transparent transparent;
+}
+
+.arrow {
+  pointer-events: none;
+}

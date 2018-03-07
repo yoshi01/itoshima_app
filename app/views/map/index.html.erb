@@ -39,6 +39,7 @@
       google.maps.event.addListener(handler.getMap(), "click", mapListener);
       google.maps.event.addListener(handler.getMap(), "change", markerChangeListener);
       google.maps.event.addListener(handler.getMap(), "open", infowindowListener);
+      google.maps.event.addListener(handler.getMap(), "focus", focusListener);
       directionsDisplay.setMap(handler.getMap());
     });
 </script>
