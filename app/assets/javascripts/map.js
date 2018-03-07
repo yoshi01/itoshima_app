@@ -141,8 +141,8 @@ function addRoute(id, rank, name, desc, path, lat, lng, marker_id){
         $(tr).attr("data-id", id.toString());
     }
     if (marker_id != null && marker_id != undefined ) {
-        $(btn).addClass("marked");
-        $(btn).attr("data-marker-id", marker_id.toString());
+        $(tr).addClass("marked");
+        $(tr).attr("data-marker-id", marker_id.toString());
     }
     $(tr).attr("data-lat", lat.toString());
     $(tr).attr("data-long", lng.toString());
@@ -150,6 +150,7 @@ function addRoute(id, rank, name, desc, path, lat, lng, marker_id){
     td = $(td).append(p);
     tr = $(tr).append(td);
     tr = $(tr).append($('<td>').append(btn));
+
     if (!isRouteListExists(tr)) {
         $('#route-list').append(tr);
         checkDisabled();
@@ -212,7 +213,7 @@ function clearRoute() {
 
 function removeRoute(tr) {
     var id = $(tr).attr("data-id");
-    var marker_id = $(tr).find('.marked').attr('data-marker-id');
+    var marker_id = $(tr).attr('data-marker-id');
     if (id != null && id != undefined) {
         google.maps.event.trigger(handler.getMap(), "change", id, "red");
     }
