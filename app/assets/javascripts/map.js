@@ -105,6 +105,16 @@ function infowindowListener(id){
     });
 }
 
+function focusListener(lat, lng){
+    if (infowindow != null) {
+        infowindow.close();
+    }
+    if (handler.currentInfowindow()) {
+        handler.currentInfowindow().close();
+    }
+    handler.getMap().setCenter(new google.maps.LatLng(lat, lng));
+}
+
 function addMarker(){
     if(!markerMode) {
         markerMode = true;
@@ -255,6 +265,12 @@ $(document).on("click", '#route-list tr.spot', function() {
     if (id != null && id != undefined) {
         google.maps.event.trigger(handler.getMap(), "open", id);
     }
+});
+
+$(document).on("click", '#route-list tr.marked', function() {
+    var lat = $(this).attr("data-lat");
+    var lng = $(this).attr("data-long");
+    google.maps.event.trigger(handler.getMap(), "focus", lat, lng);
 });
 
 $('#route-list').on("click", ".delete-btn", function() {
