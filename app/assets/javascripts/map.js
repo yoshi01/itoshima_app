@@ -14,7 +14,7 @@ $(document).ready( function(){
 });
 
 function searchRoute() {
-    var points = $('#route-list tr');
+    var points = $('#route-list tr.spot');
 
     if (points.length >= 2){
         var origin;
@@ -116,6 +116,8 @@ function addRoute(id, rank, name, desc, path, lat, lng, marker_id){
     var tr = $('<tr>');
     var td = $('<td>');
     var tag;
+    var route_spots = $('#route-list tr.spot');
+
     if (path != null) {
       tag = $('<a>', {
         "class": "table-spot-name",
@@ -150,15 +152,28 @@ function addRoute(id, rank, name, desc, path, lat, lng, marker_id){
     td = $(td).append(p);
     tr = $(tr).append(td);
     tr = $(tr).append($('<td>').append(btn));
+    $(tr).addClass("spot");
 
     if (!isRouteListExists(tr)) {
+        if (route_spots.length != 0) {
+            var div = $('<div>', {
+                "class": "triangle"
+            });
+            var triangle_td = $('<td>').attr("colspan", "2");
+            var triangle_tr = $('<tr>', {
+                "class": "arrow"
+            });
+            triangle_td = $(triangle_td).append(div);
+            triangle_tr = $(triangle_tr).append(triangle_td);
+            $('#route-list').append(triangle_tr);
+        }
         $('#route-list').append(tr);
         checkDisabled();
     };
 }
 
 function checkDisabled() {
-    var listSize = $('#route-list tr').length;
+    var listSize = $('#route-list tr.spot').length;
     if (listSize == 2) {
         $('#search-btn').removeAttr("disabled");
     } else if (listSize == 1) {
@@ -168,7 +183,7 @@ function checkDisabled() {
 
 function isRouteListExists(tr) {
     var exist = false;
-    $('#route-list tr').each(function() {
+    $('#route-list tr.spot').each(function() {
         if($('p', this).text() == $('p', tr).text()) {
             exist = true;
         }
@@ -205,7 +220,7 @@ function courseChanged(obj) {
 }
 
 function clearRoute() {
-    var route_spots = $('#route-list tr');
+    var route_spots = $('#route-list tr.spot');
     for (var i = 0; i < route_spots.length; i++) {
         removeRoute(route_spots[i]);
     }
@@ -214,6 +229,7 @@ function clearRoute() {
 function removeRoute(tr) {
     var id = $(tr).attr("data-id");
     var marker_id = $(tr).attr('data-marker-id');
+    var route_spots = $('#route-list tr.spot');
     if (id != null && id != undefined) {
         google.maps.event.trigger(handler.getMap(), "change", id, "red");
     }
@@ -221,11 +237,20 @@ function removeRoute(tr) {
         spotMarkers[marker_id].setMap(null);
     }
     directionsDisplay.setDirections({routes: []});
+    if (route_spots.length != 0) {
+        var arrow;
+        if($(tr).next().attr("class") == "arrow") {
+            arrow = $(tr).next();
+        } else {
+            arrow = $(tr).prev();
+        }
+        arrow.remove();
+    }
     $(tr).remove();
     checkDisabled();
 }
 
-$(document).on("click", '#route-list tr', function() {
+$(document).on("click", '#route-list tr.spot', function() {
     var id = $(this).attr("data-id");
     if (id != null && id != undefined) {
         google.maps.event.trigger(handler.getMap(), "open", id);
