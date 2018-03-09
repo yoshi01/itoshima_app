@@ -40,6 +40,7 @@ function searchRoute() {
         directionsService.route(request, function(response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
                 directionsDisplay.setDirections(response);
+                displayRouteDetail(response.routes[0].legs);
             }
         });
     }
@@ -166,20 +167,52 @@ function addRoute(id, rank, name, desc, path, lat, lng, marker_id){
 
     if (!isRouteListExists(tr)) {
         if (route_spots.length != 0) {
-            var div = $('<div>', {
+            var div_arrow = $('<div>', {
+                "class": "div-arrow"
+            });
+            var div_triangle = $('<div>', {
                 "class": "triangle"
             });
-            var triangle_td = $('<td>').attr("colspan", "2");
-            var triangle_tr = $('<tr>', {
+            var div_icon = $('<div>', {
+                "class": "icon-route-detail"
+            });
+            var p_detail = $('<p>', {
+                "class": "route-detail text-muted"
+            });
+            var td_arrow = $('<td>').attr("colspan", "2");
+            var tr_arrow = $('<tr>', {
                 "class": "arrow"
             });
-            triangle_td = $(triangle_td).append(div);
-            triangle_tr = $(triangle_tr).append(triangle_td);
-            $('#route-list').append(triangle_tr);
+            div_arrow = $(div_arrow).append(div_triangle);
+            div_arrow = $(div_arrow).append(div_icon);
+            div_arrow = $(div_arrow).append(p_detail);
+            td_arrow = $(td_arrow).append(div_arrow);
+            tr_arrow = $(tr_arrow).append(td_arrow);
+            $('#route-list').append(tr_arrow);
         }
         $('#route-list').append(tr);
         checkDisabled();
     };
+}
+
+function displayRouteDetail(data) {
+    var p_details = $('#route-list p.route-detail');
+    var div_icon = $('#route-list div.icon-route-detail');
+    for (var i = 0; i < data.length; i++) {
+        var distance = data[i].distance.text;
+        var duration = data[i].duration.text;
+        $(p_details[i]).text("約" + duration + " (" + distance + ")");
+        $(div_icon[i]).addClass("icon-car");
+    }
+}
+
+function clearRouteDetail() {
+    var p_details = $('#route-list p.route-detail');
+    var div_icon = $('#route-list div.icon-route-detail');
+    for (var i = 0; i < p_details.length; i++) {
+        $(p_details[i]).text("");
+        $(div_icon[i]).removeClass("icon-car");
+    }
 }
 
 function checkDisabled() {
@@ -257,6 +290,7 @@ function removeRoute(tr) {
         arrow.remove();
     }
     $(tr).remove();
+    clearRouteDetail();
     checkDisabled();
 }
 
