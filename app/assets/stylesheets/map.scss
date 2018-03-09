@@ -54,8 +54,19 @@
     margin: 0px;
 }
 
+.div-arrow {
+    position: relative;
+    height: 18px;
+}
+
 .triangle {
-    margin: 0 auto;
+    position: absolute;
+    top: 2px;
+    bottom: 1px;
+    right: 50%;
+    left: 0;
+    margin-left: auto;
+    padding: 0;
     width: 0;
     height: 0;
     border-style: solid;
@@ -64,5 +75,18 @@
 }
 
 .arrow {
-  pointer-events: none;
+    pointer-events: none;
+}
+
+.route-detail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 50%;
+    margin-right: auto;
+    margin: 0;
+    padding: 0;
+    width: 50%;
+    height: 18px;
 }
