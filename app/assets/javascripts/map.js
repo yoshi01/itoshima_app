@@ -173,6 +173,9 @@ function addRoute(id, rank, name, desc, path, lat, lng, marker_id){
             var div_triangle = $('<div>', {
                 "class": "triangle"
             });
+            var div_icon = $('<div>', {
+                "class": "icon-route-detail"
+            });
             var p_detail = $('<p>', {
                 "class": "route-detail text-muted"
             });
@@ -181,6 +184,7 @@ function addRoute(id, rank, name, desc, path, lat, lng, marker_id){
                 "class": "arrow"
             });
             div_arrow = $(div_arrow).append(div_triangle);
+            div_arrow = $(div_arrow).append(div_icon);
             div_arrow = $(div_arrow).append(p_detail);
             td_arrow = $(td_arrow).append(div_arrow);
             tr_arrow = $(tr_arrow).append(td_arrow);
@@ -193,17 +197,21 @@ function addRoute(id, rank, name, desc, path, lat, lng, marker_id){
 
 function displayRouteDetail(data) {
     var p_details = $('#route-list p.route-detail');
+    var div_icon = $('#route-list div.icon-route-detail');
     for (var i = 0; i < data.length; i++) {
         var distance = data[i].distance.text;
         var duration = data[i].duration.text;
-        $(p_details[i]).text("車: 約" + duration + " (" + distance + ")");
+        $(p_details[i]).text("約" + duration + " (" + distance + ")");
+        $(div_icon[i]).addClass("icon-car");
     }
 }
 
 function clearRouteDetail() {
     var p_details = $('#route-list p.route-detail');
+    var div_icon = $('#route-list div.icon-route-detail');
     for (var i = 0; i < p_details.length; i++) {
         $(p_details[i]).text("");
+        $(div_icon[i]).removeClass("icon-car");
     }
 }
 
