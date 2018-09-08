@@ -1,0 +1,18 @@
+<div id="info-window-name">
+  <%= link_to "#{tourist_spot.rank}位 #{tourist_spot.name}", tourist_spot %>
+</div>
+
+<div id="info-window-picture">
+  <% if tourist_spot.picture.present? %>
+    <%= image_tag(tourist_spot.picture.thumb.url) %>
+  <% else %>
+    <%= image_tag("no_image.jpg") %>
+  <% end %>
+</div>
+
+<div id="info-wondow-point">
+  <%= button_tag "経路に追加", id: "btn-add-route", class: "btn btn-primary btn-sm", onclick: "addRoute(#{tourist_spot.id},
+    '#{tourist_spot.rank}', '#{tourist_spot.name}',
+    '#{tourist_spot.description}', '#{tourist_spot_path(tourist_spot.id)}',
+    #{tourist_spot.latitude}, #{tourist_spot.longitude})" %>
+</div>

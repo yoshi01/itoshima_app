@@ -1,0 +1,47 @@
+<div class="map-container">
+  <div id="map" class="map-canvas"></div>
+  <div class="map-course">
+    <%= select_tag "select-course", options_for_select(@courses.map{|c|[c.name, c.id]}),
+      class: "form-control", onchange: "courseChanged(this)" %>
+    <%= hidden_field_tag "authenticity_token", form_authenticity_token %>
+  </div>
+  <div class="map-route">
+    <table id="route-list" class="table table-hover"></table>
+    <%= button_tag "地図上から選択", id: "add-marker-btn", onclick: "addMarker()" %>
+  </div>
+  <div class="map-search">
+    <%= button_tag "経路を検索する", id: "search-btn", class: "btn btn-primary", onclick: "searchRoute()", disabled: true %>
+  </div>
+</div>
+
+<script type="text/javascript">
+    handler = Gmaps.build('Google');
+    handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+      markers = <%= raw @hash.to_json %>
+      Gmaps.store = {}
+      Gmaps.store.markers = markers.map(function(m) {
+        marker = handler.addMarker(m);
+        marker.serviceObject.set('id', m.id);
+        marker.serviceObject.set('infowindow', m.infowindow);
+        marker.serviceObject.set('label', {
+          text: m.rank,
+          fontSize: "12px",
+          color: "white"
+        });
+        google.maps.event.addListener(marker.serviceObject, "click", markerListener);
+        return marker;
+      });
+      handler.bounds.extendWith(Gmaps.store.markers);
+      handler.fitMapToBounds();
+      handler.getMap().setCenter(new google.maps.LatLng(33.56, 130.19));
+      handler.getMap().setZoom(12);
+      handler.getMap().setOptions({ draggableCursor: "default" });
+      google.maps.event.addListener(handler.getMap(), "click", mapListener);
+      google.maps.event.addListener(handler.getMap(), "change", markerChangeListener);
+      google.maps.event.addListener(handler.getMap(), "open", infowindowListener);
+      google.maps.event.addListener(handler.getMap(), "focus", focusListener);
+      directionsDisplay.setMap(handler.getMap());
+    });
+</script>
+
+<%= javascript_include_tag "map.js" %>

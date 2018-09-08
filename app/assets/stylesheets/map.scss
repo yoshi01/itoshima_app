@@ -1,0 +1,111 @@
+.map-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+    padding-bottom: 56.25%; /* Ratio 16:9 ( 100%/16*9 = 56.25% ) */
+}
+
+.map-canvas {
+    position: absolute;
+    top: 0;
+    right: 40%;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.map-course {
+    position: absolute;
+    height: 54px;
+    top: 0;
+    right: 0;
+    left: 60%;
+    margin: 0;
+    padding: 10px;
+}
+
+.map-route {
+    overflow: scroll;
+    position: absolute;
+    top: 54px;
+    right: 0;
+    bottom: 54px;
+    left: 60%;
+    margin: 0;
+    padding: 10px;
+}
+
+.map-search {
+    position: absolute;
+    height: 54px;
+    right: 0;
+    bottom: 0;
+    left: 60%;
+    margin: 0;
+    padding: 10px;
+}
+
+#add-marker-btn {
+    margin-left: 5px;
+}
+
+#route-list {
+    margin: 0px;
+}
+
+.div-arrow {
+    position: relative;
+    height: 18px;
+}
+
+.triangle {
+    position: absolute;
+    top: 2px;
+    bottom: 1px;
+    right: 50%;
+    left: 0;
+    margin-left: auto;
+    padding: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15px 25px 0 25px;
+    border-color: grey transparent transparent transparent;
+}
+
+.arrow {
+    pointer-events: none;
+}
+
+.route-detail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 50%;
+    margin-right: auto;
+    margin-left: 23px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    width: 50%;
+    height: 18px;
+}
+
+.icon-route-detail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 50%;
+    margin: 0;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+}
+
+.icon-car {
+    background: image-url('icon_car.jpeg');
+    background-size: cover;
+}
